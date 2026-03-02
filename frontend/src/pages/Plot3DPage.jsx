@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
-import { Canvas } from '@react-three/fiber'
 import ThreeViewer from '../components/ThreeViewer'
 
 const samplePlot3D = {
-  _id: '3d1',
+  id: '3d1',
   plotId: '1',
   dimensions: {
     width: 40,
@@ -36,7 +35,7 @@ export default function Plot3DPage() {
       })
       .catch(() => {
         setPlot({
-          _id: plotId,
+          id: plotId,
           plotNumber: 'A1',
           area: 2400,
           status: 'available',
@@ -49,42 +48,57 @@ export default function Plot3DPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-xl">Loading 3D Model...</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <p>Loading...</p>
       </div>
     )
   }
 
   return (
-    <div>
-      <div className="bg-white border-b px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <Link to={`/lands/1/plots`} className="text-blue-600 hover:underline text-sm">← Back to Plots</Link>
-            <h1 className="text-2xl font-bold mt-1">
-              3D View - Plot {plot?.plotNumber}
-            </h1>
-          </div>
-          <div className="flex gap-4 items-center">
-            {plot?.price && (
-              <div className="text-right">
-                <p className="text-sm text-gray-500">Price</p>
-                <p className="text-xl font-bold text-green-600">₹{plot.price.toLocaleString()}</p>
-              </div>
-            )}
-            {plot?.status === 'available' && (
-              <button className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-colors">
-                Book Now
-              </button>
-            )}
-          </div>
+    <div style={{ height: 'calc(100vh - 80px)', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ 
+        background: 'white', 
+        padding: '15px 30px', 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <Link to={`/lands/1/plots`} style={{ color: '#666', textDecoration: 'none', fontSize: '14px' }}>
+            ← Back to Plots
+          </Link>
+          <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+            3D View - Plot {plot?.plotNumber}
+          </h1>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          {plot?.price && (
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ margin: 0, fontSize: '12px', color: '#888' }}>Price</p>
+              <p style={{ margin: 0, fontSize: '22px', fontWeight: 'bold', color: '#10b981' }}>
+                ₹{plot.price.toLocaleString()}
+              </p>
+            </div>
+          )}
+          {plot?.status === 'available' && (
+            <button style={{
+              padding: '10px 20px',
+              background: '#667eea',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: '500'
+            }}>
+              Book Now
+            </button>
+          )}
         </div>
       </div>
       
-      <div className="h-[calc(100vh-120px)] bg-gray-900">
-        <Canvas>
-          <ThreeViewer plotData={plot} plot3dData={plot3d} />
-        </Canvas>
+      <div style={{ flex: 1 }}>
+        <ThreeViewer plotData={plot} plot3dData={plot3d} />
       </div>
     </div>
   )

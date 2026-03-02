@@ -1,33 +1,32 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const plot3dSchema = new mongoose.Schema({
+const Plot3D = sequelize.define('Plot3D', {
   plotId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Plot',
-    required: true
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
   modelUrl: {
-    type: String,
-    default: ''
+    type: DataTypes.STRING,
+    defaultValue: ''
   },
   dimensions: {
-    width: { type: Number, default: 10 },
-    length: { type: Number, default: 10 },
-    height: { type: Number, default: 3 }
+    type: DataTypes.JSON,
+    defaultValue: { width: 10, length: 10, height: 3 }
   },
   houseModel: {
-    type: String,
-    default: 'basic'
+    type: DataTypes.STRING,
+    defaultValue: 'basic'
   },
   colors: {
-    wall: { type: String, default: '#f5f5dc' },
-    roof: { type: String, default: '#8b4513' },
-    ground: { type: String, default: '#228b22' }
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+    type: DataTypes.JSON,
+    defaultValue: { wall: '#f5f5dc', roof: '#8b4513', ground: '#228b22' }
   }
+}, {
+  tableName: 'plot3ds',
+  timestamps: true,
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 });
 
-module.exports = mongoose.model('Plot3D', plot3dSchema);
+module.exports = Plot3D;
