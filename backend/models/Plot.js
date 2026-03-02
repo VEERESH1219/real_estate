@@ -1,37 +1,37 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const plotSchema = new mongoose.Schema({
+const Plot = sequelize.define('Plot', {
   landId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Land',
-    required: true
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
   plotNumber: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   area: {
-    type: Number,
-    required: true
+    type: DataTypes.NUMBER,
+    allowNull: false
   },
   coordinates: {
-    type: [[Number]],
-    required: true
+    type: DataTypes.JSON,
+    allowNull: false
   },
   status: {
-    type: String,
-    enum: ['available', 'sold'],
-    default: 'available'
+    type: DataTypes.ENUM('available', 'sold'),
+    defaultValue: 'available'
   },
-  price: Number,
+  price: DataTypes.NUMBER,
   dimensions: {
-    width: Number,
-    length: Number
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+    type: DataTypes.JSON,
+    defaultValue: {}
   }
+}, {
+  tableName: 'plots',
+  timestamps: true,
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 });
 
-module.exports = mongoose.model('Plot', plotSchema);
+module.exports = Plot;

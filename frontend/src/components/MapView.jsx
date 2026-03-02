@@ -20,6 +20,8 @@ export default function MapView({
   center = [17.385044, 78.486671],
   zoom = 13 
 }) {
+  const getEntityId = (entity) => entity?.id ?? entity?._id
+
   const getPolygonColor = (type, status) => {
     if (type === 'land') return '#3b82f6'
     return status === 'available' ? '#22c55e' : '#ef4444'
@@ -35,7 +37,7 @@ export default function MapView({
       
       {lands.map((land) => (
         <Polygon
-          key={land._id}
+          key={getEntityId(land)}
           positions={land.coordinates}
           pathOptions={{ 
             color: getPolygonColor('land'),
@@ -58,7 +60,7 @@ export default function MapView({
       
       {plots.map((plot) => (
         <Polygon
-          key={plot._id}
+          key={getEntityId(plot)}
           positions={plot.coordinates}
           pathOptions={{ 
             color: getPolygonColor('plot', plot.status),

@@ -4,7 +4,7 @@ const Plot3D = require('../models/Plot3D');
 
 router.get('/plot/:plotId', async (req, res) => {
   try {
-    const plot3d = await Plot3D.findOne({ plotId: req.params.plotId });
+    const plot3d = await Plot3D.findOne({ where: { plotId: req.params.plotId } });
     if (!plot3d) {
       return res.status(404).json({ message: '3D model not found' });
     }
@@ -15,10 +15,9 @@ router.get('/plot/:plotId', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const plot3d = new Plot3D(req.body);
   try {
-    const newPlot3d = await plot3d.save();
-    res.status(201).json(newPlot3d);
+    const plot3d = await Plot3D.create(req.body);
+    res.status(201).json(plot3d);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -26,7 +25,11 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const plot3d = await Plot3D.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const plot3d = await Plot3D.findByPk(req.params.id);
+    if (!plot3d) {
+      return res.status(404).json({ message: '3D model not found' });
+    }
+    await plot3d.update(req.body);
     res.json(plot3d);
   } catch (err) {
     res.status(400).json({ message: err.message });

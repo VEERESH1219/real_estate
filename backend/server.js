@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const sequelize = require('./config/database');
 const cors = require('cors');
 
 const landsRouter = require('./routes/lands');
@@ -21,13 +21,14 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/realestate';
 
-mongoose.connect(MONGO_URI)
+sequelize.sync({ force: false })
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('Connected to SQLite');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   })
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .catch((err) => console.error('SQLite connection error:', err));
+
+module.exports = app;

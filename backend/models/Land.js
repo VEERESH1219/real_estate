@@ -1,28 +1,30 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const landSchema = new mongoose.Schema({
+const Land = sequelize.define('Land', {
   name: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   location: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   totalArea: {
-    type: Number,
-    required: true
+    type: DataTypes.NUMBER,
+    allowNull: false
   },
   coordinates: {
-    type: [[Number]],
-    required: true
+    type: DataTypes.JSON,
+    allowNull: false
   },
-  description: String,
-  imageUrl: String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  description: DataTypes.STRING,
+  imageUrl: DataTypes.STRING
+}, {
+  tableName: 'lands',
+  timestamps: true,
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 });
 
-module.exports = mongoose.model('Land', landSchema);
+module.exports = Land;
